@@ -1,0 +1,13 @@
+services:
+  gaze-tracker:
+    image: gaze-tracker
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - XDG_CACHE_HOME=/data/cache
+    volumes:
+      - gaze-tracker-cache:/data/cache
+
+volumes:
+  gaze-tracker-cache:

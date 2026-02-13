@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gaze Tracker</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo">GT</div>
+          <div>
+            <h1>Gaze Tracker</h1>
+            <p>YuNet (ONNX) + pupil + calibration → screen</p>
+          </div>
+        </div>
+        <div class="badges">
+          <span class="badge">local inference</span>
+          <span class="badge">api-driven</span>
+          <span class="badge">webcam</span>
+        </div>
+      </div>
+
+      <div class="layout">
+        <section class="panel">
+          <div class="panel-title">Камера</div>
+          <div id="camwrap" class="camwrap">
+            <video id="video" class="mirror" autoplay playsinline muted></video>
+            <canvas id="overlay" class="mirror"></canvas>
+          </div>
+
+          <div class="controls">
+            <button id="btnStart" class="btn">Start</button>
+            <button id="btnStop" class="btn secondary" disabled>Stop</button>
+            <button id="btnReset" class="btn secondary">Reset calib</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><div class="k">FPS</div><div class="v" id="fps">—</div></div>
+            <div class="stat"><div class="k">Calibrated</div><div class="v" id="calib">—</div></div>
+            <div class="stat"><div class="k">Warnings</div><div class="v" id="warn">—</div></div>
+          </div>
+
+          <div class="hint">Стрелка направления рисуется на видео‑оверлее. Точка на “экране” — после калибровки.</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">Экран</div>
+          <canvas id="screen" width="960" height="540"></canvas>
+
+          <div class="controls">
+            <button id="btnCalib" class="btn">Calibrate (9 pts)</button>
+            <button id="btnCapture" class="btn secondary" disabled>Capture</button>
+            <button id="btnFit" class="btn secondary" disabled>Fit</button>
+          </div>
+
+          <div class="hint">
+            Калибровка: нажми <b>Calibrate</b>, смотри на оранжевую точку и жми <b>Capture</b> для каждой позиции
+            (сделается короткий burst из нескольких кадров), затем нажми <b>Fit</b>.
+          </div>
+
+          <details open>
+            <summary>Debug JSON</summary>
+            <div class="mono" id="status">loading…</div>
+          </details>
+        </section>
+      </div>
+
+      <div class="footer">
+        <span>Модель: YuNet (OpenCV Zoo, ONNX)</span>
+        <span>Web UI работает через API на localhost</span>
+      </div>
+    </div>
+
+    <div id="calibOverlay" class="calib-overlay">
+      <canvas id="calibCanvas"></canvas>
+      <div class="calib-ui">
+        <div class="top">
+          <div class="card">
+            <div class="calib-title">Calibration</div>
+            <div class="mono" id="calibProgress">—</div>
+          </div>
+          <div class="card" style="max-width:560px;">
+            <div class="hint">
+              Смотри на оранжевую точку и нажимай <b>Capture</b>.
+              Можно жать <b>Space</b>. Чтобы выйти — <b>Esc</b>.
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="btnOverlayCapture" class="btn">Capture (Space)</button>
+          <button id="btnOverlayExit" class="btn secondary">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
