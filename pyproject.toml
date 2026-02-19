@@ -18,6 +18,7 @@ dependencies = [
 
 [project.scripts]
 gaze-tracker = "gaze_tracker.api:cli"
+gaze-mpiigaze-preprocess = "gaze_tracker.datasets.mpiigaze_preprocess:cli"
 
 [tool.setuptools]
 include-package-data = true

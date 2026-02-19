@@ -15,6 +15,7 @@
 - [Быстрый старт](#быстрый-старт)
 - [Калибровка](#калибровка)
 - [Запуск в Docker](#запуск-в-docker)
+- [Подготовка датасета MPIIGaze](#подготовка-датасета-mpiigaze)
 - [API](#api)
 - [Параметры запуска](#параметры-запуска)
 - [Структура проекта](#структура-проекта)
@@ -67,6 +68,38 @@ docker run --rm -p 8000:8000 gaze-tracker
 docker compose up --build
 ```
 
+## Подготовка датасета MPIIGaze
+
+Конвертер в проекте:
+
+- модуль: `gaze_tracker/datasets/mpiigaze_preprocess.py`
+- команда: `python -m gaze_tracker.datasets.mpiigaze_preprocess`
+
+Полная команда:
+
+```powershell
+python -m gaze_tracker.datasets.mpiigaze_preprocess `
+  --mpiigaze-root MPIIGaze `
+  --output-dir data/mpiigaze_processed
+```
+
+Smoke-test:
+
+```powershell
+python -m gaze_tracker.datasets.mpiigaze_preprocess `
+  --mpiigaze-root MPIIGaze `
+  --output-dir data/mpiigaze_processed_sample `
+  --max-samples 200
+```
+
+Что получаем:
+- кропы `face`, `left_eye`, `right_eye`
+- `metadata.csv` с bbox и нормированными координатами зрачка
+
+Подробно:
+- `docs/dataset_mpiigaze_preprocessing.md`
+- `notebooks/02_mpiigaze_preprocessing_ru.ipynb`
+
 ## API
 
 Эндпоинты:
@@ -103,12 +136,17 @@ gaze_tracker/
   api.py                 # FastAPI + статика (Web UI)
   service.py             # пайплайн: YuNet → глаза → зрачок → признаки → калибровка
   calibration.py         # линейная регрессия (ridge) для калибровки
+  datasets/              # подготовка датасетов (MPIIGaze preprocessing)
   detectors/yunet.py     # YuNet (OpenCV Zoo, ONNX) + автоскачивание
   vision/pupil.py        # эвристический центр зрачка (classic CV)
   web/                   # UI (HTML/CSS/JS)
 docs/
   requirements.md        # требования (таблица)
   requirements.xlsx      # те же требования в Excel
+  dataset_mpiigaze_preprocessing.md  # описание preprocessing MPIIGaze
+notebooks/
+  01_quickstart_ru.ipynb
+  02_mpiigaze_preprocessing_ru.ipynb
 ```
 
 ## Траблшутинг
